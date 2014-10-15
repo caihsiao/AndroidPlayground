@@ -23,6 +23,7 @@ public class QuizActivity extends Activity {
     private Boolean mIsCheater = false;
     public static final String TAG = "QuizActivity";
     public static final String KEY_INDEX = "index";
+    public static final String IS_CHEATER = "cheat";
 
     private TrueFalse[] mQuestionBank = new TrueFalse[] {
       new TrueFalse(R.string.question_0, true),
@@ -53,6 +54,7 @@ public class QuizActivity extends Activity {
 
         if (savedInstanceState != null) {
           mCurrentIndex = savedInstanceState.getInt(KEY_INDEX);
+          mIsCheater = savedInstanceState.getBoolean(IS_CHEATER);
         }
 
         Log.d(TAG, "on create start!");
@@ -128,6 +130,7 @@ public class QuizActivity extends Activity {
       super.onSaveInstanceState(saveInstanceState);
       Log.i(TAG, "Save instance state.");
       saveInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+      saveInstanceState.putBoolean(IS_CHEATER, mIsCheater);
     }
 
     @Override

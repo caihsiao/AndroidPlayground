@@ -3,6 +3,7 @@ package com.example.caihsiao.photoquiz;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,8 @@ public class CheatActivity extends Activity {
     public static final String EXTRA_ANSWER_SHOWN =
             "com.example.caihsiao.photoquiz.answer_shown";
 
+    private boolean mIsAnswerShown;
+
     private void answerShown(boolean isAnswerShown) {
       Intent data = new Intent();
       data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
@@ -26,10 +29,26 @@ public class CheatActivity extends Activity {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle saveInstanceState) {
+      super.onSaveInstanceState(saveInstanceState);
+      saveInstanceState.putBoolean(QuizActivity.IS_CHEATER, mIsAnswerShown);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cheat);
-        answerShown(false);
+        mIsAnswerShown = false;
+        if (savedInstanceState != null) {
+          mIsAnswerShown = savedInstanceState.getBoolean(QuizActivity.IS_CHEATER);
+          if (mIsAnswerShown) {
+            TextView answerView = (TextView) findViewById(R.id.answer_text);
+            boolean answer_is_true = getIntent().getBooleanExtra(
+                    EXTRA_ANSWER_IS_TRUE, false);
+            answerView.setText(answer_is_true ? R.string.true_button : R.string.false_button);
+          }
+        }
+        answerShown(mIsAnswerShown);
         // Handle button show answers.
         Button showAnswer = (Button)findViewById(R.id.show_answer);
         showAnswer.setOnClickListener(new View.OnClickListener() {
@@ -39,8 +58,8 @@ public class CheatActivity extends Activity {
             boolean answer_is_true = getIntent().getBooleanExtra(
                     EXTRA_ANSWER_IS_TRUE, false);
             answerView.setText(answer_is_true ? R.string.true_button : R.string.false_button);
-            answerShown(true);
-            // Toast.makeText(CheatActivity.this, R.string.cheat_toast, Toast.LENGTH_SHORT).show();
+            mIsAnswerShown = true;
+            answerShown(mIsAnswerShown);
           }
         });
     }

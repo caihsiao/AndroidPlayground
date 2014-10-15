@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Quiz</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="true_button">True</string>
+    <string name="false_button">False</string>
+    <string name="cheat_button">Cheat!</string>
+    <string name="cheated">Jesus, I can not believe you are cheating!</string>
+    <string name="not_cheated">Good boy! You are not cheating!</string>
+    <string name="cheat_toast">Cheating is wrong!</string>
+    <string name="cheat_info">Are you sure you want to do this?</string>
+    <string name="show_answer">Show answer!</string>
+    <string name="next_button">Next</string>
+    <string name="previous_button">Prev</string>
+    <string name="correct_toast">Correct!</string>
+    <string name="incorrect_toast">Incorrect!</string>
+    <string name="question_0">Is Dong beautiful?</string>
+    <string name="question_1">Is Dong smart?</string>
+    <string name="question_2">Is Dong kindhearted?</string>
+    <string name="question_3">Is Dong honest?</string>
+    <string name="question_4">Is Dong talented?</string>
+    <string name="question_5">Is Dong stupid?</string>
+    <string name="title_activity_cheat">Cheat</string>
+
+</resources>

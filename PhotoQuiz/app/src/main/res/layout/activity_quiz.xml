@@ -59,5 +59,15 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/api_level"
+
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textSize="30dp"
+        android:padding="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
 

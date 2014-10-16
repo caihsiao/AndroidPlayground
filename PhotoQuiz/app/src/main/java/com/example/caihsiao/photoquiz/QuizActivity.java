@@ -1,7 +1,9 @@
 package com.example.caihsiao.photoquiz;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -56,6 +58,13 @@ public class QuizActivity extends Activity {
           mCurrentIndex = savedInstanceState.getInt(KEY_INDEX);
           mIsCheater = savedInstanceState.getBoolean(IS_CHEATER);
         }
+
+        // Handle displaying API level.
+        TextView apiLevelView = (TextView)findViewById(R.id.api_level);
+        apiLevelView.setText("API Level: " + Build.VERSION.SDK_INT);
+
+        ActionBar actionBar = getActionBar();
+        actionBar.setSubtitle("Bodies of water.");
 
         Log.d(TAG, "on create start!");
 

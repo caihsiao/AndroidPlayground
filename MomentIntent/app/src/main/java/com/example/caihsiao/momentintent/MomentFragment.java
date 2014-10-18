@@ -7,7 +7,12 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+
+import java.text.DateFormat;
 
 
 /**
@@ -59,6 +64,21 @@ public class MomentFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_moment, container, false);
 
+        // Handle display date.
+        Button dateField = (Button) view.findViewById(R.id.moment_date);
+        dateField.setText(DateFormat.getDateTimeInstance().format(mMoment.getDate()));
+        dateField.setEnabled(false);
+
+        // Handle checkbox.
+        CheckBox isPublic = (CheckBox) view.findViewById(R.id.is_public);
+        isPublic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+          @Override
+          public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            mMoment.setPublic(b);
+          }
+        });
+
+        // Handle input title.
         EditText titleField = (EditText) view.findViewById(R.id.moment_title);
         titleField.addTextChangedListener(new TextWatcher() {
           @Override

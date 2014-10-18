@@ -9,21 +9,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MomentActivity extends Activity {
+public class MomentActivity extends SingleFragmentActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_moment);
+  @Override
+  protected Fragment createFragment() {
+    return new MomentFragment();
+  }
 
-        FragmentManager fm = getFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
-
-        if (fragment == null) {
-          fragment = new MomentFragment();
-          fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
-        }
-    }
+//  @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_fragment);
+//
+//        FragmentManager fm = getFragmentManager();
+//        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+//
+//        if (fragment == null) {
+//          fragment = new MomentFragment();
+//          fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
+//        }
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

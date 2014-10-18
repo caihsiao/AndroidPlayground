@@ -3,10 +3,13 @@
 
     <string name="app_name">MomentIntent</string>
     <string name="title">Title</string>
+    <string name="moment_title">Moments</string>
     <string name="details">Details</string>
     <string name="is_public">Public?</string>
     <string name="action_settings">Settings</string>
     <string name="moment_title_hint">Your moment title...</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_moment_list">MomentListActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

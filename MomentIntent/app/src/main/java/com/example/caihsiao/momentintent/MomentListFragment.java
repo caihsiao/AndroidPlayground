@@ -1,6 +1,7 @@
 package com.example.caihsiao.momentintent;
 
 import android.app.ListFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -69,6 +70,10 @@ public class MomentListFragment extends ListFragment {
 
         Moment moment = ((MomentAdapter)getListAdapter()).getItem(position);
         Log.d(TAG, moment.getTitle() + " was clicked!");
+
+        Intent intent = new Intent(getActivity(), MomentActivity.class);
+        intent.putExtra(MomentFragment.EXTRA_MOMENT_ID, moment.getId());
+        startActivity(intent);
 
 //        if (null != mListener) {
 //            // Notify the active callbacks interface (the activity, if the

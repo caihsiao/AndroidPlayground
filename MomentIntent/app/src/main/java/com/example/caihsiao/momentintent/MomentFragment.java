@@ -13,6 +13,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import java.text.DateFormat;
+import java.util.UUID;
 
 
 /**
@@ -27,8 +28,7 @@ import java.text.DateFormat;
 public class MomentFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    public static final String EXTRA_MOMENT_ID = "com.example.caihsiao.momentintent.moment_id";
 
     private Moment mMoment;
 
@@ -44,8 +44,6 @@ public class MomentFragment extends Fragment {
     public static MomentFragment newInstance(String param1, String param2) {
         MomentFragment fragment = new MomentFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,7 +54,9 @@ public class MomentFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMoment = new Moment();
+        // mMoment = new Moment();
+        UUID momentId = (UUID) getActivity().getIntent().getSerializableExtra(EXTRA_MOMENT_ID);
+        mMoment = MomentLab.getInstance(getActivity()).getMoment(momentId);
     }
 
     @Override
@@ -71,6 +71,7 @@ public class MomentFragment extends Fragment {
 
         // Handle checkbox.
         CheckBox isPublic = (CheckBox) view.findViewById(R.id.is_public);
+        isPublic.setChecked(mMoment.isPublic());
         isPublic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
           @Override
           public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -80,10 +81,11 @@ public class MomentFragment extends Fragment {
 
         // Handle input title.
         EditText titleField = (EditText) view.findViewById(R.id.moment_title);
+        titleField.setText(mMoment.getTitle());
         titleField.addTextChangedListener(new TextWatcher() {
           @Override
           public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            // Leave blank.
+
           }
 
           @Override

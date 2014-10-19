@@ -2,7 +2,13 @@ package com.example.caihsiao.momentintent;
 
 import android.app.ListFragment;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -14,6 +20,8 @@ import java.util.ArrayList;
  * interface.
  */
 public class MomentListFragment extends ListFragment {
+
+    private static final String TAG = "MomentListFragment";
 
     private ArrayList<Moment> mMoments;
 
@@ -32,9 +40,8 @@ public class MomentListFragment extends ListFragment {
         getActivity().setTitle(R.string.moment_title);
         mMoments = MomentLab.getInstance(getActivity()).getMoments();
 
-//        // TODO: Change Adapter to display your content
-//        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-//                android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS));
+        // TODO: Change Adapter to display your content
+        setListAdapter(new MomentAdapter(mMoments));
     }
 
 
@@ -56,16 +63,41 @@ public class MomentListFragment extends ListFragment {
 //    }
 
 
-//    @Override
-//    public void onListItemClick(ListView l, View v, int position, long id) {
-//        super.onListItemClick(l, v, position, id);
-//
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        Moment moment = ((MomentAdapter)getListAdapter()).getItem(position);
+        Log.d(TAG, moment.getTitle() + " was clicked!");
+
 //        if (null != mListener) {
 //            // Notify the active callbacks interface (the activity, if the
 //            // fragment is attached to one) that an item has been selected.
 //            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
 //        }
-//    }
+    }
+
+    private class MomentAdapter extends ArrayAdapter<Moment> {
+      private MomentAdapter(ArrayList<Moment> moments) {
+        super(getActivity(), 0, moments);
+      }
+
+      @Override
+      public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+          convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_moment, null);
+        }
+        Moment moment = getItem(position);
+        TextView titleTextView = (TextView) convertView.findViewById(R.id.moment_list_item_titleTextView);
+        titleTextView.setText(moment.getTitle());
+        TextView dateTextView = (TextView) convertView.findViewById(R.id.moment_list_item_dateTextView);
+        dateTextView.setText(moment.getDate().toString());
+        CheckBox publicCheckBox = (CheckBox) convertView.findViewById(R.id.moment_list_item_publicCheckbox);
+        publicCheckBox.setChecked(moment.isPublic());
+
+        return convertView;
+      }
+    }
 //
 //    /**
 //    * This interface must be implemented by activities that contain this

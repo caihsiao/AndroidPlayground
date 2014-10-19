@@ -40,6 +40,11 @@ public class Moment {
     mTitle = title;
   }
 
+  @Override
+  public String toString() {
+    return mTitle;
+  }
+
   public Moment() {
     // Generate unique identifier.
     mId = UUID.randomUUID();

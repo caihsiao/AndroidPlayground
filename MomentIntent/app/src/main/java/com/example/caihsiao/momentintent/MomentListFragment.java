@@ -45,8 +45,13 @@ public class MomentListFragment extends ListFragment {
         setListAdapter(new MomentAdapter(mMoments));
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MomentAdapter)getListAdapter()).notifyDataSetChanged();
+    }
 
-//    @Override
+    //    @Override
 //    public void onAttach(Activity activity) {
 //        super.onAttach(activity);
 //        try {

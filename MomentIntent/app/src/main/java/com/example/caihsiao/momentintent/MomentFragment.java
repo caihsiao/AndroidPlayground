@@ -40,10 +40,10 @@ public class MomentFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment MomentFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static MomentFragment newInstance(String param1, String param2) {
+    public static MomentFragment newInstance(UUID momentId) {
         MomentFragment fragment = new MomentFragment();
         Bundle args = new Bundle();
+        args.putSerializable(EXTRA_MOMENT_ID, momentId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,7 +55,8 @@ public class MomentFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // mMoment = new Moment();
-        UUID momentId = (UUID) getActivity().getIntent().getSerializableExtra(EXTRA_MOMENT_ID);
+        // UUID momentId = (UUID) getActivity().getIntent().getSerializableExtra(EXTRA_MOMENT_ID);
+        UUID momentId = (UUID) getArguments().getSerializable(EXTRA_MOMENT_ID);
         mMoment = MomentLab.getInstance(getActivity()).getMoment(momentId);
     }
 

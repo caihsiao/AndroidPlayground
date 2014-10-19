@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import java.util.UUID;
 
 public class MomentActivity extends SingleFragmentActivity {
 
   @Override
   protected Fragment createFragment() {
-    return new MomentFragment();
+      UUID momentId = (UUID) getIntent().getSerializableExtra(MomentFragment.EXTRA_MOMENT_ID);
+      return MomentFragment.newInstance(momentId);
   }
 
 //  @Override

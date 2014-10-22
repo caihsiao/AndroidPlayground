@@ -76,7 +76,8 @@ public class MomentListFragment extends ListFragment {
         Moment moment = ((MomentAdapter)getListAdapter()).getItem(position);
         Log.d(TAG, moment.getTitle() + " was clicked!");
 
-        Intent intent = new Intent(getActivity(), MomentActivity.class);
+        // Intent intent = new Intent(getActivity(), MomentActivity.class);
+        Intent intent = new Intent(getActivity(), MomentPagerActivity.class);
         intent.putExtra(MomentFragment.EXTRA_MOMENT_ID, moment.getId());
         startActivity(intent);
 

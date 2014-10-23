@@ -1,6 +1,7 @@
 package com.example.caihsiao.momentintent;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,17 +30,11 @@ public class MomentFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String EXTRA_MOMENT_ID = "com.example.caihsiao.momentintent.moment_id";
+    private static final String DIALOG_DATE = "date";
 
     private Moment mMoment;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MomentFragment.
-     */
+
     public static MomentFragment newInstance(UUID momentId) {
         MomentFragment fragment = new MomentFragment();
         Bundle args = new Bundle();
@@ -68,7 +63,15 @@ public class MomentFragment extends Fragment {
         // Handle display date.
         Button dateField = (Button) view.findViewById(R.id.moment_date);
         dateField.setText(DateFormat.getDateTimeInstance().format(mMoment.getDate()));
-        dateField.setEnabled(false);
+        // dateField.setEnabled(false);
+        dateField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getActivity().getFragmentManager();
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mMoment.getDate());
+                dialog.show(fm, DIALOG_DATE);
+            }
+        });
 
         // Handle checkbox.
         CheckBox isPublic = (CheckBox) view.findViewById(R.id.is_public);

@@ -11,5 +11,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_moment_list">MomentListActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="date_picker_title">Date of Moment:</string>
 
 </resources>

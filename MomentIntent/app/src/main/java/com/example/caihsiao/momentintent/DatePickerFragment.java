@@ -2,10 +2,13 @@ package com.example.caihsiao.momentintent;
 
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
@@ -27,6 +30,17 @@ public class DatePickerFragment extends DialogFragment {
 
     private Date mDate;
 
+    private void sendResult(int resultCode) {
+        if (getTargetFragment() == null) {
+            return;
+        }
+
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_DATE, mDate);
+
+        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mDate = (Date) getArguments().getSerializable(EXTRA_DATE);
@@ -44,7 +58,7 @@ public class DatePickerFragment extends DialogFragment {
         datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker datePicker, int i, int i2, int i3) {
-                mDate = new GregorianCalendar(year, month, day).getTime();
+                mDate = new GregorianCalendar(i, i2, i3).getTime();
                 getArguments().putSerializable(EXTRA_DATE, mDate);
             }
         });
@@ -52,7 +66,13 @@ public class DatePickerFragment extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setView(view)
                 .setTitle(R.string.date_picker_title)
-                .setPositiveButton(android.R.string.ok, null)
+                .setPositiveButton(android.R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                sendResult(Activity.RESULT_OK);
+                            }
+                        })
                 .create();
     }
 

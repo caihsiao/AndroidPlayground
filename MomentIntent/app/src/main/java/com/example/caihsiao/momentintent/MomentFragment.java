@@ -1,7 +1,9 @@
 package com.example.caihsiao.momentintent;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import java.text.DateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 
@@ -31,9 +34,14 @@ public class MomentFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String EXTRA_MOMENT_ID = "com.example.caihsiao.momentintent.moment_id";
     private static final String DIALOG_DATE = "date";
+    private static final int REQUEST_DATE = 0;
 
     private Moment mMoment;
+    private Button mDateField;
 
+    private void updateDate() {
+        mDateField.setText(mMoment.getDate().toString());
+    }
 
     public static MomentFragment newInstance(UUID momentId) {
         MomentFragment fragment = new MomentFragment();
@@ -61,14 +69,16 @@ public class MomentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_moment, container, false);
 
         // Handle display date.
-        Button dateField = (Button) view.findViewById(R.id.moment_date);
-        dateField.setText(DateFormat.getDateTimeInstance().format(mMoment.getDate()));
+        mDateField = (Button) view.findViewById(R.id.moment_date);
+        // mDateField.setText(DateFormat.getDateTimeInstance().format(mMoment.getDate()));
+        updateDate();
         // dateField.setEnabled(false);
-        dateField.setOnClickListener(new View.OnClickListener() {
+        mDateField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getActivity().getFragmentManager();
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mMoment.getDate());
+                dialog.setTargetFragment(MomentFragment.this, REQUEST_DATE);
                 dialog.show(fm, DIALOG_DATE);
             }
         });
@@ -106,4 +116,13 @@ public class MomentFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) return;
+        if (requestCode == REQUEST_DATE) {
+            Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            mMoment.setDate(date);
+            updateDate();
+        }
+    }
 }

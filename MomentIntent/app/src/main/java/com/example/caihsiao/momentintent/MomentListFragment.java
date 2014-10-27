@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -61,16 +62,27 @@ public class MomentListFragment extends ListFragment {
         // activity hosting this fragment has been destroyed. In the future we should put all the
         // codes that change the activity's behavior in onCreateView.
         getActivity().setTitle(R.string.moment_title);
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        // View view = inflater.inflate(R.layout.empty_frame, container, false);
+        // View view = super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.empty_frame, container, false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             if (mSubtitleVisible) {
                 getActivity().getActionBar().setSubtitle(R.string.subtitle);
             }
         }
 
-//        ListView listView = (ListView) view.findViewById(R.id.empty_list_view);
-//        listView.setEmptyView(getActivity().findViewById(R.id.add_first_moment));
+        ListView listView = (ListView) view.findViewById(android.R.id.list);
+        listView.setEmptyView(view.findViewById(R.id.add_first_moment));
+        Button button = (Button) view.findViewById(R.id.add_first_moment_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Moment moment = new Moment();
+                MomentLab.getInstance(getActivity()).addMoment(moment);
+                Intent intent = new Intent(getActivity(), MomentPagerActivity.class);
+                intent.putExtra(MomentFragment.EXTRA_MOMENT_ID, moment.getId());
+                startActivityForResult(intent, 0);
+            }
+        });
 
         return view;
     }

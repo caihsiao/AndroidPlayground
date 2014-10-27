@@ -70,8 +70,10 @@ public class MomentListFragment extends ListFragment {
             }
         }
 
-        ListView listView = (ListView) view.findViewById(android.R.id.list);
-        listView.setEmptyView(view.findViewById(R.id.add_first_moment));
+        // The following two lines can be omitted because of the magic variable
+        // android.R.id.list and R.id.empty
+//        ListView listView = (ListView) view.findViewById(android.R.id.list);
+//        listView.setEmptyView(view.findViewById(R.id.empty));
         Button button = (Button) view.findViewById(R.id.add_first_moment_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

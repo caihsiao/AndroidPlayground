@@ -1,9 +1,15 @@
 package com.example.caihsiao.momentintent;
 
+import android.annotation.TargetApi;
 import android.app.ListFragment;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -24,25 +30,49 @@ public class MomentListFragment extends ListFragment {
 
     private static final String TAG = "MomentListFragment";
 
+    private boolean mSubtitleVisible;
+
     private ArrayList<Moment> mMoments;
 
     // private OnFragmentInteractionListener mListener;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+
     public MomentListFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.moment_title);
+        setHasOptionsMenu(true);
         mMoments = MomentLab.getInstance(getActivity()).getMoments();
+
+        setRetainInstance(true);
+        mSubtitleVisible = false;
 
         // TODO: Change Adapter to display your content
         setListAdapter(new MomentAdapter(mMoments));
+    }
+
+    @TargetApi(11)
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // The activity title has to be set here instead of onCreate, because
+        // when rotated this fragment is retained so onCreate will not be called again, but the
+        // activity hosting this fragment has been destroyed. In the future we should put all the
+        // codes that change the activity's behavior in onCreateView.
+        getActivity().setTitle(R.string.moment_title);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        // View view = inflater.inflate(R.layout.empty_frame, container, false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (mSubtitleVisible) {
+                getActivity().getActionBar().setSubtitle(R.string.subtitle);
+            }
+        }
+
+//        ListView listView = (ListView) view.findViewById(R.id.empty_list_view);
+//        listView.setEmptyView(getActivity().findViewById(R.id.add_first_moment));
+
+        return view;
     }
 
     @Override
@@ -68,6 +98,42 @@ public class MomentListFragment extends ListFragment {
 //        mListener = null;
 //    }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_moment_list, menu);
+        MenuItem showSubtitle = menu.findItem(R.id.memu_item_show_subtitle);
+        if (mSubtitleVisible && showSubtitle != null){
+            showSubtitle.setTitle(R.string.hide_subtitle);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_new_moment:
+                Moment moment = new Moment();
+                MomentLab.getInstance(getActivity()).addMoment(moment);
+                Intent intent = new Intent(getActivity(), MomentPagerActivity.class);
+                intent.putExtra(MomentFragment.EXTRA_MOMENT_ID, moment.getId());
+                startActivityForResult(intent, 0);
+                return true;
+            case R.id.memu_item_show_subtitle:
+                if (getActivity().getActionBar().getSubtitle() == null) {
+                    getActivity().getActionBar().setSubtitle(R.string.subtitle);
+                    item.setTitle(R.string.hide_subtitle);
+                    mSubtitleVisible = true;
+                } else {
+                    getActivity().getActionBar().setSubtitle(null);
+                    item.setTitle(R.string.show_subtitle);
+                    mSubtitleVisible = false;
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {

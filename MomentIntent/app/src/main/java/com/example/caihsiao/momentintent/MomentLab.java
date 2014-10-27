@@ -25,6 +25,10 @@ public class MomentLab {
     return mMoments;
   }
 
+  public void addMoment(Moment moment) {
+      mMoments.add(moment);
+  }
+
   public Moment getMoment(UUID id) {
     for (Moment moment : mMoments) {
       if (moment.getId().equals(id)) {
@@ -38,11 +42,11 @@ public class MomentLab {
     mAppContext = appContext;
 
     mMoments = new ArrayList<Moment>();
-    for (int i = 0; i < 100; ++i) {
-      Moment moment = new Moment();
-      moment.setTitle("Moment #" + i);
-      moment.setPublic(i % 2 == 0);
-      mMoments.add(moment);
-    }
+//    for (int i = 0; i < 100; ++i) {
+//      Moment moment = new Moment();
+//      moment.setTitle("Moment #" + i);
+//      moment.setPublic(i % 2 == 0);
+//      mMoments.add(moment);
+//    }
   }
 }

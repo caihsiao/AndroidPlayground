@@ -12,5 +12,12 @@
     <string name="title_activity_moment_list">MomentListActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="date_picker_title">Date of Moment:</string>
+    <string name="new_moment">New Moment</string>
+    <string name="show_subtitle">Show Subtitle</string>
+    <string name="hide_subtitle">Hide Subtitle</string>
+    <string name="subtitle">If you see the moment, keep it.</string>
+    <string name="delete_moment">Delete</string>
+    <string name="add_first_moment">Add your first moment!</string>
+    <string name="empty_message">You do not have any moments!</string>
 
 </resources>

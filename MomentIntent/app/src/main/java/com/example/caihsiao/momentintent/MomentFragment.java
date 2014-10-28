@@ -151,4 +151,10 @@ public class MomentFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MomentLab.getInstance(getActivity()).saveMoments();
+    }
 }

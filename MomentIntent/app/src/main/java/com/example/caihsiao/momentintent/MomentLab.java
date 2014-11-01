@@ -58,6 +58,10 @@ public class MomentLab {
       }
   }
 
+  public void deleteMoment(Moment moment) {
+      mMoments.remove(moment);
+  }
+
   private MomentLab(Context appContext) {
     mAppContext = appContext;
     mSerializer = new MomentIntentJSONSerializer(mAppContext, FILENAME);

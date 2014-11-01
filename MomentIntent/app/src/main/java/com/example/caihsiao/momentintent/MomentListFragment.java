@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -70,6 +72,9 @@ public class MomentListFragment extends ListFragment {
             }
         }
 
+        ListView listView = (ListView) view.findViewById(android.R.id.list);
+        registerForContextMenu(listView);
+
         // The following two lines can be omitted because of the magic variable
         // android.R.id.list and R.id.empty
 //        ListView listView = (ListView) view.findViewById(android.R.id.list);
@@ -121,6 +126,28 @@ public class MomentListFragment extends ListFragment {
         if (mSubtitleVisible && showSubtitle != null){
             showSubtitle.setTitle(R.string.hide_subtitle);
         }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        getActivity().getMenuInflater().inflate(R.menu.moment_list_item_context, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int position = info.position;
+        MomentAdapter adapter = (MomentAdapter) getListAdapter();
+        Moment moment = adapter.getItem(position);
+
+        switch (item.getItemId()) {
+            case R.id.menu_item_delete_moment:
+                MomentLab.getInstance(getActivity()).deleteMoment(moment);
+                adapter.notifyDataSetChanged();
+                return true;
+        }
+
+        return super.onContextItemSelected(item);
     }
 
     @Override

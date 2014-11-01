@@ -50,7 +50,7 @@ public class MomentLab {
   public boolean saveMoments() {
       try {
           mSerializer.saveMoments(mMoments);
-          Log.d(TAG, "Moments saved to file");
+          // Log.d(TAG, "Moments saved to file");
           return true;
       } catch (Exception e) {
           Log.e(TAG, "Error saving moments: ", e);

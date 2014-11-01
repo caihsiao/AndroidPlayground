@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -39,9 +41,11 @@ public class MomentFragment extends Fragment {
     public static final String EXTRA_MOMENT_ID = "com.example.caihsiao.momentintent.moment_id";
     private static final String DIALOG_DATE = "date";
     private static final int REQUEST_DATE = 0;
+    private static final String TAG = "MomentFragment";
 
     private Moment mMoment;
     private Button mDateField;
+    private ImageButton mPhotoButton;
 
     private void updateDate() {
         mDateField.setText(mMoment.getDate().toString());
@@ -124,6 +128,15 @@ public class MomentFragment extends Fragment {
           public void afterTextChanged(Editable editable) {
             // Leave blank.
           }
+        });
+
+        mPhotoButton = (ImageButton) view.findViewById(R.id.moment_imageButton);
+        mPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MomentCameraActivity.class);
+                startActivity(intent);
+            }
         });
 
         return view;

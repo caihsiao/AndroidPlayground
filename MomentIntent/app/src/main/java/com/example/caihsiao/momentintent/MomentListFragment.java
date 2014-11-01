@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -58,7 +60,7 @@ public class MomentListFragment extends ListFragment {
 
     @TargetApi(11)
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // The activity title has to be set here instead of onCreate, because
         // when rotated this fragment is retained so onCreate will not be called again, but the
         // activity hosting this fragment has been destroyed. In the future we should put all the
@@ -66,14 +68,62 @@ public class MomentListFragment extends ListFragment {
         getActivity().setTitle(R.string.moment_title);
         // View view = super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.empty_frame, container, false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        ListView listView = (ListView) view.findViewById(android.R.id.list);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            registerForContextMenu(listView);
+        } else {
             if (mSubtitleVisible) {
                 getActivity().getActionBar().setSubtitle(R.string.subtitle);
             }
+            // Use contextual action bar on Honeycomb and higher.
+            listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+            listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                @Override
+                public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+                    // Not used in this implementation.
+                }
+
+                @Override
+                public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                    MenuInflater inflater1 = actionMode.getMenuInflater();
+                    inflater1.inflate(R.menu.moment_list_item_context, menu);
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                    // not implemented
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                    switch (menuItem.getItemId()) {
+                        case R.id.menu_item_delete_moment:
+                            MomentAdapter adapter = (MomentAdapter) getListAdapter();
+                            MomentLab momentLab = MomentLab.getInstance(getActivity());
+                            for (int i = adapter.getCount() - 1; i >= 0; --i) {
+                                if (getListView().isItemChecked(i)) {
+                                    momentLab.deleteMoment(adapter.getItem(i));
+                                }
+                            }
+                            actionMode.finish();
+                            adapter.notifyDataSetChanged();
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode actionMode) {
+
+                }
+            });
         }
 
-        ListView listView = (ListView) view.findViewById(android.R.id.list);
-        registerForContextMenu(listView);
+
+
 
         // The following two lines can be omitted because of the magic variable
         // android.R.id.list and R.id.empty

@@ -10,7 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
-
+import android.view.Window;
+import android.view.WindowManager;
 
 
 public class MomentCameraActivity extends SingleFragmentActivity {
@@ -20,16 +21,15 @@ public class MomentCameraActivity extends SingleFragmentActivity {
         return new MomentCameraFragment();
     }
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_moment_camera);
-//        if (savedInstanceState == null) {
-//            getFragmentManager().beginTransaction()
-//                    .add(R.id.container, new PlaceholderFragment())
-//                    .commit();
-//        }
-//    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // Hide the window title.
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // Hide the status bar and other OS-level chrome.
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        super.onCreate(savedInstanceState);
+    }
 
 
     @Override

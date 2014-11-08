@@ -3,7 +3,9 @@ package com.example.caihsiao.momentintent;
 
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,6 +35,8 @@ public class MomentCameraFragment extends Fragment {
     private Camera mCamera;
     private SurfaceView mSurfaceView;
     private View mProgressContainer;
+
+    public static final String EXTRA_PHOTO_FILENAME = "com.example.caihsiao.photo_filename";
 
 
     public MomentCameraFragment() {
@@ -84,6 +88,11 @@ public class MomentCameraFragment extends Fragment {
             }
             if (success) {
                 Log.i(TAG, "JPEG saved at " + filename);
+                Intent intent = new Intent();
+                intent.putExtra(EXTRA_PHOTO_FILENAME, filename);
+                getActivity().setResult(Activity.RESULT_OK, intent);
+            } else {
+                getActivity().setResult(Activity.RESULT_CANCELED);
             }
             getActivity().finish();
         }

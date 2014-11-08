@@ -41,6 +41,7 @@ public class MomentFragment extends Fragment {
     public static final String EXTRA_MOMENT_ID = "com.example.caihsiao.momentintent.moment_id";
     private static final String DIALOG_DATE = "date";
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_PHOTO = 1;
     private static final String TAG = "MomentFragment";
 
     private Moment mMoment;
@@ -135,7 +136,7 @@ public class MomentFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), MomentCameraActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_PHOTO);
             }
         });
 
@@ -151,6 +152,14 @@ public class MomentFragment extends Fragment {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mMoment.setDate(date);
             updateDate();
+        } else if (requestCode == REQUEST_PHOTO) {
+            String filename = data.getStringExtra(MomentCameraFragment.EXTRA_PHOTO_FILENAME);
+            if (filename != null) {
+                Log.i(TAG, "filename: " + filename);
+                Photo photo = new Photo(filename);
+                mMoment.setPhoto(photo);
+                Log.i(TAG, "Moment: " + mMoment.getTitle() + " has a photo");
+            }
         }
     }
 

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -20,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -42,11 +44,13 @@ public class MomentFragment extends Fragment {
     private static final String DIALOG_DATE = "date";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_PHOTO = 1;
+    private static final String DIALOG_IMAGE = "image";
     private static final String TAG = "MomentFragment";
 
     private Moment mMoment;
     private Button mDateField;
     private ImageButton mPhotoButton;
+    private ImageView mPhotoView;
 
     private void updateDate() {
         mDateField.setText(mMoment.getDate().toString());
@@ -71,6 +75,18 @@ public class MomentFragment extends Fragment {
         // UUID momentId = (UUID) getActivity().getIntent().getSerializableExtra(EXTRA_MOMENT_ID);
         UUID momentId = (UUID) getArguments().getSerializable(EXTRA_MOMENT_ID);
         mMoment = MomentLab.getInstance(getActivity()).getMoment(momentId);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        showPhoto();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        PictureUtils.cleanImageView(mPhotoView);
     }
 
     @TargetApi(11)
@@ -140,9 +156,32 @@ public class MomentFragment extends Fragment {
             }
         });
 
+        mPhotoView = (ImageView) view.findViewById(R.id.moment_imageView);
+        mPhotoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Photo photo = mMoment.getPhoto();
+                if (photo == null) {
+                    return;
+                }
 
+                FragmentManager fm = getActivity().getFragmentManager();
+                String path = getActivity().getFileStreamPath(photo.getFilename()).getAbsolutePath();
+                ImageFragment.createInstance(path).show(fm, DIALOG_IMAGE);
+            }
+        });
 
         return view;
+    }
+
+    private void showPhoto() {
+        Photo photo = mMoment.getPhoto();
+        BitmapDrawable bitmapDrawable = null;
+        if (photo != null) {
+            String path = getActivity().getFileStreamPath(photo.getFilename()).getAbsolutePath();
+            bitmapDrawable = PictureUtils.getScaledDrawable(getActivity(), path);
+        }
+        mPhotoView.setImageDrawable(bitmapDrawable);
     }
 
     @Override
@@ -158,7 +197,8 @@ public class MomentFragment extends Fragment {
                 Log.i(TAG, "filename: " + filename);
                 Photo photo = new Photo(filename);
                 mMoment.setPhoto(photo);
-                Log.i(TAG, "Moment: " + mMoment.getTitle() + " has a photo");
+                // Log.i(TAG, "Moment: " + mMoment.getTitle() + " has a photo");
+                showPhoto();
             }
         }
     }

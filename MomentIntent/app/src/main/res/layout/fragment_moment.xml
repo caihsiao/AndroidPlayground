@@ -18,6 +18,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/moment_imageView"
+                android:scaleType="centerInside"
+                android:background="@android:color/darker_gray"
+                android:cropToPadding="true"
+                />
+
             <ImageButton
                 android:id="@+id/moment_imageButton"
                 android:src="@android:drawable/ic_menu_camera"
